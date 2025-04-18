@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useAuth } from "./context/AuthContext";
+import Header from "./components/Login";
+import PricingTable from "./components/PricingTable";
+import { AnimatePresence, motion } from "framer-motion";
 
-function App() {
+const App = () => {
+  const { loggedIn } = useAuth();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <AnimatePresence mode="wait">
+      {loggedIn ? (
+        <motion.div
+          key="pricing"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -40 }}
+          transition={{ duration: 0.4 }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <PricingTable />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="header"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -40 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Header />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
-}
+};
 
 export default App;
